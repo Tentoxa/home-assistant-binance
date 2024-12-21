@@ -15,6 +15,7 @@ from homeassistant.const import (
 logger = logging.getLogger(__name__)
 
 
+
 class BinanceTickerSensor(Entity):
     def __init__(self, symbol, decimals, update_interval):
         self._attr_device_class = SensorDeviceClass.MONETARY
@@ -96,16 +97,17 @@ class BinanceTickerSensor(Entity):
         try:
             response = requests.request("GET", url, headers={}, data={}, timeout=5)
             
-            if response.status_code != 200:
-                raise RequestException(response.json())
-            
-            data = response.json()
-            
-            lastPrice = round(decimal.Decimal(data['lastPrice']), self._decimals)
-            formatted_lastPrice = self.pretty_format_number(lastPrice)
+            response.raise_for_status()  # This handles non-200 status codes
 
+            data = response.json()
+
+            lastPrice = round(decimal.Decimal(data['lastPrice']), self._decimals)
+            print(lastPrice)
+            formatted_lastPrice = self.pretty_format_number(lastPrice)
+            print(formatted_lastPrice)
             data["formatted_lastPrice"] = formatted_lastPrice
-            
+            print(data)
+
             self._data = data
             self._state = lastPrice
             
