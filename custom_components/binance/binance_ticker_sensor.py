@@ -106,6 +106,7 @@ class BinanceTickerSensor(Entity):
             formatted_lastPrice = BinanceTickerSensor.pretty_format_number(float(data['lastPrice']))
             data["formatted"] = formatted_lastPrice
 
+
             self._data = data
             self._state = lastPrice
             
