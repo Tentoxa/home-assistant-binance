@@ -99,10 +99,11 @@ class BinanceTickerSensor(Entity):
             if response.status_code != 200:
                 raise RequestException(response.json())
             
-            lastPrice = round(decimal.Decimal(self._data['lastPrice']), self._decimals)
+            data = response.json()
+            
+            lastPrice = round(decimal.Decimal(data['lastPrice']), self._decimals)
             formatted_lastPrice = self.pretty_format_number(lastPrice)
 
-            data = response.json()
             data["formatted_lastPrice"] = formatted_lastPrice
             
             self._data = data
