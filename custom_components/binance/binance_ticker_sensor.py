@@ -52,7 +52,7 @@ class BinanceTickerSensor(Entity):
         )
 
     # For usage with a AWTRIX clock
-    def pretty_format_number(value: float) -> str:
+    def pretty_format_number(value) -> str:
         """
         Format a number to exactly 6 characters according to its magnitude.
         Examples:
@@ -103,7 +103,7 @@ class BinanceTickerSensor(Entity):
 
             lastPrice = round(decimal.Decimal(data['lastPrice']), self._decimals)
             print(lastPrice)
-            formatted_lastPrice = self.pretty_format_number(lastPrice)
+            formatted_lastPrice = self.pretty_format_number(float(data['lastPrice']))
             print(formatted_lastPrice)
             data["formatted_lastPrice"] = formatted_lastPrice
             print(data)
