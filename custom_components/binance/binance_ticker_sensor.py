@@ -16,12 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 class BinanceTickerSensor(Entity):
-
-    def __init__(self, symbol, decimals):
+    def __init__(self, symbol, decimals, update_interval):
         self._attr_device_class = SensorDeviceClass.MONETARY
         self._name = "Binance Ticker "+symbol.upper()
         self._symbol = symbol
         self._decimals = decimals
+        self._update_interval = update_interval
         self._state = STATE_UNKNOWN
         self._data = {}
 
@@ -47,7 +47,7 @@ class BinanceTickerSensor(Entity):
 
     async def async_added_to_hass(self):
         self.hass.helpers.event.async_track_time_interval(
-            self.update, timedelta(seconds=60)
+            self.update, timedelta(seconds=self._update_interval)
         )
 
     def update(self, *args):
