@@ -51,8 +51,8 @@ class BinanceTickerSensor(Entity):
             self.update, timedelta(seconds=self._update_interval)
         )
 
-    # For usage with a AWTRIX clock
-    def pretty_format_number(self, value) -> str:
+    @staticmethod
+    def pretty_format_number(value) -> str:
         """
         Format a number to exactly 6 characters according to its magnitude.
         Examples:
@@ -89,6 +89,7 @@ class BinanceTickerSensor(Entity):
         else:
             return f"{value/1000:.1f}k"
 
+
     def update(self, *args):
         logger.debug("Updating %s - args", self._name, args)
         
@@ -102,7 +103,7 @@ class BinanceTickerSensor(Entity):
             data = response.json()
 
             lastPrice = round(decimal.Decimal(data['lastPrice']), self._decimals)
-            formatted_lastPrice = self.pretty_format_number(float(data['lastPrice']))
+            formatted_lastPrice = BinanceTickerSensor.pretty_format_number(float(data['lastPrice']))
             data["formatted_lastPrice"] = formatted_lastPrice
 
             self._data = data
